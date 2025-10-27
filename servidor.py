@@ -4,9 +4,7 @@ import struct
 import json
 from datetime import datetime, timezone
 
-# ======================
-# CONFIGURAÇÕES
-# ======================
+# Configurações
 HOST = '0.0.0.0'
 PORT = 50000
 
@@ -15,9 +13,7 @@ HEADER_SIZE = 4
 VERSION = 1
 FORMAT = 'utf-8'
 
-# ======================
-# COMANDOS
-# ======================
+# Comandos
 CMD_LOGIN = 1
 CMD_POST_MESSAGE = 2
 CMD_GET_HISTORY = 3
@@ -28,17 +24,13 @@ CMD_BROADCAST_NEW_MESSAGE = 102
 CMD_HISTORY_RESPONSE = 103
 CMD_ERROR = 200
 
-# ======================
-# ESTRUTURAS GLOBAIS
-# ======================
+# Estruturas Globais
 clients = {}  # conn -> {'username': str, 'addr': (ip,port)}
 history = []  # mensagens anteriores
 lock = threading.Lock()
 
 
-# ======================
-# FUNÇÕES AUXILIARES
-# ======================
+#Funções Auxiliares
 def recv_all(conn, n):
     data = b''
     while len(data) < n:
@@ -81,9 +73,7 @@ def broadcast(cmd, payload):
                 pass
 
 
-# ======================
-# HANDLER DE CLIENTE
-# ======================
+# Handler do Cliente
 def handle_client(conn, addr):
     try:
         cmd, version, payload = recv_message(conn)
@@ -157,9 +147,7 @@ def handle_client(conn, addr):
         conn.close()
 
 
-# ======================
-# MAIN SERVER LOOP
-# ======================
+# Main Server Loop
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((HOST, PORT))

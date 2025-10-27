@@ -5,18 +5,14 @@ import threading
 import sys
 from datetime import datetime
 
-# ======================
-# CONFIGURAÇÕES
-# ======================
+# Configurações
 HEADER_FMT = '!BBH'
 HEADER_SIZE = 4
 VERSION = 1
 FORMAT = 'utf-8'
 DEFAULT_PORT = 50000
 
-# ======================
-# COMANDOS
-# ======================
+# Comandos
 CMD_LOGIN = 1
 CMD_POST_MESSAGE = 2
 CMD_GET_HISTORY = 3
@@ -28,9 +24,7 @@ CMD_HISTORY_RESPONSE = 103
 CMD_ERROR = 200
 
 
-# ======================
-# FUNÇÕES AUXILIARES
-# ======================
+# Funções Auxiliares
 def pack_message(cmd, payload):
     payload_bytes = json.dumps(payload, separators=(',', ':')).encode(FORMAT)
     header = struct.pack(HEADER_FMT, cmd, VERSION, len(payload_bytes))
@@ -59,9 +53,7 @@ def recv_message(sock):
     return cmd, payload
 
 
-# ======================
-# THREAD DE RECEBIMENTO
-# ======================
+# Recebimento
 def receive_loop(sock):
     while True:
         msg = recv_message(sock)
@@ -94,9 +86,7 @@ def receive_loop(sock):
     sys.exit(0)
 
 
-# ======================
-# FUNÇÃO PRINCIPAL
-# ======================
+# Função Principal
 def main():
     print("=== Cliente do Mural de Recados ===")
     server_ip = input("IP do servidor [localhost]: ") or "localhost"
@@ -117,11 +107,11 @@ def main():
         print(f"Erro ao conectar: {e}")
         return
 
-    # LOGIN
+    # Login
     sock.sendall(pack_message(CMD_LOGIN, {"username": username}))
     print("Conectado. Use /sair para sair.\n")
 
-    # Thread para receber mensagens
+    # Receber mensagens
     threading.Thread(target=receive_loop, args=(sock,), daemon=True).start()
 
     # Loop principal
